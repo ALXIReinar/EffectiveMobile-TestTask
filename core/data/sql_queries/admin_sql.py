@@ -13,12 +13,7 @@ class AdminQueries:
         ...
 
 
-    async def all_services(self):
-
-        ... # Запрос в таблицу services
-
-        return [    # мок ответ
-            {'id': 1, 'title': 'analytics'},
-            {'id': 2, 'title': 'development'},
-            {'id': 3, 'title': 'HR department'},
-        ]
+    async def all_services(self, limit, offset):
+        query = 'SELECT DISTINCT service FROM permissions LIMIT $1 OFFSET $2'
+        res = await self.conn.fetchrow(query, limit, offset)
+        return res

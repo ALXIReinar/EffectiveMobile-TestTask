@@ -26,6 +26,23 @@ class Roles:
     hr = 'hr'
 
 
+@dataclass
+class Services:
+    analytics: str = 'analytics'
+    finance: str = 'finance'
+    users: str = 'users'
+    infrastructure: str = 'infrastructure'
+
+
+@dataclass
+class Permissions:
+    write: str = 'write'
+    read: str = 'read'
+    manage: str = 'manage'
+    deploy: str = 'deploy'
+    delete: str = 'delete'
+    create: str = 'create'
+
 
 def hide_log_param(param, start=3, end=8):
     return param[:start] + '*' * len(param[start:-end-1]) + param[-end:]

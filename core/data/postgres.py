@@ -6,6 +6,7 @@ from starlette.requests import Request
 
 from core.data.sql_queries.admin_sql import AdminQueries
 from core.data.sql_queries.users_sql import UsersQueries, AuthQueries
+from core.data.sql_queries.permissions_sql import PermissionsQueries
 
 
 class PgSql:
@@ -14,6 +15,7 @@ class PgSql:
         self.users = UsersQueries(conn)
         self.auth = AuthQueries(conn)
         self.admin = AdminQueries(conn)
+        self.permissions = PermissionsQueries(conn)
 
 
 

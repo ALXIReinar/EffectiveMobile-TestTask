@@ -4,7 +4,6 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.types import ASGIApp, Send, Receive, Scope
 
-from core.config_dir.config import env
 from core.data.postgres import PgSql
 from core.utils.anything import get_client_ip
 from core.utils.jwt_factory import get_jwt_decode_payload, reissue_aT
@@ -24,7 +23,7 @@ class AuthUXASGIMiddleware:
         now = datetime.now(UTC)
         ip = get_client_ip(request)
 
-        request.state.role = 'student'
+        request.state.role = None
         request.state.client_ip = ip
         request.state.user_id = 1
         request.state.session_id = '1'
@@ -32,7 +31,7 @@ class AuthUXASGIMiddleware:
         url = request.url.path
 
         "Не нуждаются в авторизации, Если юрл в белом списке"
-        if any(url.startswith(prefix) for prefix in ('/api/v1/public', '/docs')):
+        if any(url.startswith(prefix) for prefix in ('/api/v1/public', )):
             await self.app(scope, receive, send)
             return
 

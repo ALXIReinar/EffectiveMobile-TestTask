@@ -1,8 +1,14 @@
-from fastapi import HTTPException
+from typing import Annotated
+
+from fastapi import HTTPException, Depends
+from pydantic import BaseModel, Field
 from starlette.requests import Request
 
+class Pagination(BaseModel):
+    limit: int = Field(10, ge=1)
+    offset: int = Field(0, ge=0)
 
-
+PagenDep = Annotated[Pagination, Depends(Pagination)]
 
 def role_require(*roles: str):
     async def checker(request: Request):
