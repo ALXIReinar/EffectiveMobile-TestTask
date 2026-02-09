@@ -7,20 +7,20 @@ class UsersQueries:
     def __init__(self, conn: Connection):
         self.conn = conn
 
-    async def reg_user(self, email, passw: str, first_name: str, surname: str, last_name: str, role: str):
+    async def reg_user(self, email, passw: str, first_name: str, surname: str, last_name: str, role_id: int):
         query = '''
-        INSERT INTO users (email, passw, first_name, surname, last_name, role, is_active)
+        INSERT INTO users (email, passw, first_name, surname, last_name, role_id, is_active)
         VALUES($1, $2, $3, $4, $5, $6, true)
         ON CONFLICT (email) WHERE is_active = true DO NOTHING 
         RETURNING id
         '''
         hashed = encryption.hash(passw)
 
-        res = await self.conn.fetchval(query, email, hashed, first_name, surname, last_name, role)
+        res = await self.conn.fetchval(query, email, hashed, first_name, surname, last_name, role_id)
         return res
 
     async def select_user(self, email):
-        query = 'SELECT id, passw, role FROM users WHERE email = $1 AND is_active = true'
+        query = 'SELECT id, passw, role_id FROM users WHERE email = $1 AND is_active = true'
         res = await self.conn.fetchrow(query, email)
         return res
 
@@ -52,11 +52,6 @@ class AuthQueries:
         res = await self.conn.fetchrow(query, user_id, session_id)
         return res
 
-
-    async def all_seances_user(self, user_id: int, session_id: str):
-        query = 'SELECT user_agent, ip FROM sessions_users WHERE user_id = $1 AND session_id = $2'
-        res = await self.conn.fetch(query, user_id, session_id)
-        return res
 
     async def check_exist_session(self, user_id: int, user_agent: str):
         query = '''

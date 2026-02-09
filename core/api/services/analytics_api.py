@@ -1,13 +1,13 @@
 from fastapi import APIRouter
 from starlette.requests import Request
 
-from core.utils.anything import Services, Permissions
+from core.utils.anything import Services, Actions
 from core.utils.permissions_controller import require_permission
 
 router = APIRouter(prefix='/analytics', tags=['Analytics'])
 
 @router.get('/metrics')
-@require_permission(Services.analytics, Permissions.read)
+@require_permission(Services.analytics, Actions.read)
 async def get_metrics(request: Request):
     """Получить метрики (доступно: admin, devops, developer, project_manager, data_analyst)"""
     return {'data': {
@@ -19,7 +19,7 @@ async def get_metrics(request: Request):
 
 
 @router.post('/reports')
-@require_permission(Services.analytics, Permissions.write)
+@require_permission(Services.analytics, Actions.write)
 async def create_report(request: Request):
     """Создать отчет (доступно: admin, project_manager, data_analyst)"""
     return {'success': True, 'message': 'Отчёт создан!'}

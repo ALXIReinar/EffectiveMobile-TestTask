@@ -15,7 +15,7 @@ router = APIRouter(tags=['Пользователи'])
 
 @router.post('/public/users/sign_up', summary="Регистрация")
 async def registration_user(creds: UserRegSchema, db: PgSqlDep, request: Request):
-    insert_attempt = await db.users.reg_user(creds.email, creds.passw, creds.first_name, creds.surname, creds.last_name, creds.role)
+    insert_attempt = await db.users.reg_user(creds.email, creds.passw, creds.first_name, creds.surname, creds.last_name, creds.role_id)
 
     if not insert_attempt:
         log_event(f"Пользователь с email: {hide_log_param(creds.email)} Уже существует", request=request, level='WARNING')
@@ -36,7 +36,7 @@ async def log_in(creds: UserLogInSchema, response: Response, db: PgSqlDep, reque
             id=db_user['id'],
             user_agent=request.headers.get('user-agent'),
             ip=request.state.client_ip,
-            role=db_user['role'],
+            role=db_user['role_id'],
         )
         access_token, refresh_token = await issue_aT_rT(db,token_schema)
 

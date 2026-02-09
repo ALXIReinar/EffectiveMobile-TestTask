@@ -1,14 +1,14 @@
 from fastapi import APIRouter
 from starlette.requests import Request
 
-from core.utils.anything import Services, Permissions
+from core.utils.anything import Services, Actions
 from core.utils.permissions_controller import require_permission
 
 router = APIRouter(prefix='/finance', tags=['Finance'])
 
 
 @router.get('/budgets')
-@require_permission(Services.finance, Permissions.read)
+@require_permission(Services.finance, Actions.read)
 async def get_budgets(request: Request):
     """Просмотр бюджетов (доступно: admin, project_manager, finance_manager)"""
     return {
@@ -20,14 +20,14 @@ async def get_budgets(request: Request):
 
 
 @router.post('/expenses')
-@require_permission(Services.finance, Permissions.write)
+@require_permission(Services.finance, Actions.write)
 async def create_expense(request: Request):
     """Создать расход (доступно: admin, finance_manager)"""
     return {'success': True, 'message': 'Расход зафиксирован'}
 
 
 @router.get('/salaries')
-@require_permission(Services.finance, Permissions.read)
+@require_permission(Services.finance, Actions.read)
 async def get_salaries(request: Request):
     """Просмотр зарплат (доступно: admin, finance_manager, hr)"""
     return {

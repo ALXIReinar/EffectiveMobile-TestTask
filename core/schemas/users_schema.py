@@ -56,15 +56,26 @@ class UserRegSchema(ValidatePasswSchema):
     first_name: str
     surname: str
     last_name: str
-    role: str
+    role_id: int
 
-class RecoveryPasswSchema(BaseModel):
+
+class CreateUserSchema(BaseModel):
     email: EmailStr
+    password: str
+    first_name: str
+    surname: str
+    last_name: str
+    role_id: int
+
+
+class ChangePasswordSchema(BaseModel):
+    user_id: int
+    new_password: str
 
 
 class TokenPayloadSchema(BaseModel):
     id: int
-    role: str
+    role: int
     user_agent: str = Field(max_length=200)
     ip: str = Field(max_length=45)  # IPv6 может быть до 45 символов
 

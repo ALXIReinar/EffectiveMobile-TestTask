@@ -26,11 +26,33 @@ encryption = CryptContext(schemes=['argon2'], deprecated='auto')
 
 @lru_cache
 def get_pkey():
-    return  (WORKDIR / 'secrets' / 'keys' / 'private_jwt.pem').read_text()
+    """"""
+    "Докер Окружение"
+    docker_secret_path = Path('/run/secrets/private_key.pem')
+    if docker_secret_path.exists():
+        return docker_secret_path.read_text()
+    
+    "Локалка"
+    local_path = WORKDIR / 'secrets' / 'keys' / 'private_jwt.pem'
+    if local_path.exists():
+        return local_path.read_text()
+
+    raise FileNotFoundError("Private key not found in Docker secrets or local paths")
 
 @lru_cache
 def get_pubkey():
-    return (WORKDIR / 'secrets' / 'keys' / 'public_jwt.pem').read_text()
+    """"""
+    "Докер Окружение"
+    docker_secret_path = Path('/run/secrets/public_key.pem')
+    if docker_secret_path.exists():
+        return docker_secret_path.read_text()
+    
+    "Локалка"
+    local_path = WORKDIR / 'secrets' / 'keys' / 'public_jwt.pem'
+    if local_path.exists():
+        return local_path.read_text()
+    
+    raise FileNotFoundError("Public key not found in Docker secrets or local paths")
 
 class AuthConfig(BaseModel):
     private_key: str = get_pkey()
@@ -59,6 +81,7 @@ class Settings(BaseSettings):
     redis_host_docker: str
 
     app_mode: AppMode
+    uvi_workers: int
     trusted_proxies: set[str] = {'127.0.0.1', '172.18.0.1'}
 
     model_config = SettingsConfigDict(extra='allow')

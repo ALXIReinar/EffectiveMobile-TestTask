@@ -64,5 +64,5 @@ class AuthUXASGIMiddleware:
 
         request.state.user_id = int(access_token['sub'])
         request.state.session_id = access_token['s_id']
-        request.state.role = access_token['role']
+        request.state.role = int(access_token['role_id'])
         await self.app(scope, receive, send)
