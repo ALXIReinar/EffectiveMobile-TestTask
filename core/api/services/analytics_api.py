@@ -1,10 +1,11 @@
 from fastapi import APIRouter
 from starlette.requests import Request
 
+from core.schemas.cookie_settings_schema import JWTCookieDep
 from core.utils.anything import Services, Actions
 from core.utils.permissions_controller import require_permission
 
-router = APIRouter(prefix='/analytics', tags=['Analytics'])
+router = APIRouter(prefix='/analytics', tags=['Analytics'], dependencies=[JWTCookieDep])
 
 @router.get('/metrics')
 @require_permission(Services.analytics, Actions.read)

@@ -6,11 +6,12 @@ from starlette.requests import Request
 
 from core.data.postgres import PgSqlDep
 from core.schemas.admin_schema import CreatePermissionSchema, UpdatePermissionSchema
+from core.schemas.cookie_settings_schema import JWTCookieDep
 from core.utils.anything import Services, Actions
 from core.utils.lite_dependencies import Pagination
 from core.utils.permissions_controller import require_permission
 
-router = APIRouter(prefix='/permissions', tags=['Admin - Permissions'])
+router = APIRouter(prefix='/permissions', tags=['Admin - Permissions'], dependencies=[JWTCookieDep])
 
 
 @router.get('/all')
